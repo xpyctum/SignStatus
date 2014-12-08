@@ -1,0 +1,10 @@
+name: SignStatus
+main: SignStatus\SignStatus
+version: 1.0
+author: xpyctum
+api: [1.0.0]
+load: POSTWORLD
+permissions:
+ signstatus:
+  default: op
+  description: Can create status sign
