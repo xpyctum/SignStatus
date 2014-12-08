@@ -22,16 +22,19 @@ use pocketmine\Server;
 ##########################################
 */
 class SignStatus extends PluginBase implements Listener{
-	
-	public function onLoad(){
-		
-	
-	}
-	
+
 	public function onEnable(){
-		if (!file_exists($this->getDataFolder())) @mkdir($this->getDataFolder(), 0755, true);
-        $this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
-		Server::getInstance()->getPluginManager()->registerEvents($this, $this);
+		if(!file_exists($this->getDataFolder())) @mkdir($this->getDataFolder(), 0755, true);
+		$this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML, [
+			"sign" => [
+				"enabled" => false,
+				"x" => 0,
+				"y" => 0,
+				"z" => 0,
+				"level" => "world"
+			]
+		]);
+		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$time = 100;
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new Task($this), $time);
 	}
@@ -67,10 +70,7 @@ class SignStatus extends PluginBase implements Listener{
 			$p = count($this->getServer()->getOnlinePlayers());
 			$level = $event->getBlock()->getLevel();
 			$full = $this->getServer()->getMaxPlayers();
-			$event->setLine(0,"[STATUS]");
-			$event->setLine(1,"TPS: [".$tps."]");
-			$event->setLine(2,"ONLINE: ".$p."/".$full."");
-			$event->setLine(3,"******");
+			$event->setText("[STATUS]", "TPS: [$tps]", "ONLINE: $p/$full", "******");
 			$this->sign->set("x",$event->getBlock()->getX());			
 			$this->sign->set("y",$event->getBlock()->getY());			
 			$this->sign->set("z",$event->getBlock()->getZ());			
