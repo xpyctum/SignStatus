@@ -10,24 +10,26 @@ use pocketmine\math\Vector3;
 use pocketmine\tile\Sign;
 
 class Task extends PluginTask{
-	 public function __construct(SignStatus $plugin){
-        parent::__construct($plugin);
-        $this->plugin = $plugin;
-    }
+	private $plugin;
+	public function __construct(SignStatus $plugin){
+		parent::__construct($plugin);
+		$this->plugin = $plugin;
+	}
 
-    public function onRun($currentTick){
-    	$val = Server::getInstance()->getPluginManager()->getPlugin("SignStatus")->enabled();
+	public function onRun($currentTick){
+		$val = $this->plugin->enabled();
 		if($val === "true" || $val === true){
-			$x = Server::getInstance()->getPluginManager()->getPlugin("SignStatus")->getThisSignX();
-			$y = Server::getInstance()->getPluginManager()->getPlugin("SignStatus")->getThisSignY();
-			$z = Server::getInstance()->getPluginManager()->getPlugin("SignStatus")->getThisSignZ();
-			$lvz = $this->owner->getServer()->getPluginManager()->getPlugin("SignStatus")->level();
-			$level = Server::getInstance()->getLevelByName($lvz);
+			$x = $this->plugin->getThisSignX();
+			$y = $this->plugin->getThisSignY();
+			$z = $this->plugin->getThisSignZ();
+			$lvz = $this->plugin->level();
+			$level = $this->plugin->getServer()->getLevelByName($lvz);
 			$sign = $level->getTile(new Vector3($x,$y,$z));
 			if($sign instanceof Sign){
-				$sign->setLine(1,"TPS");
-				
+				$texts = $sign->getText();
+				$texts[0] = "TPS";
+				$sign->setText(...$texts);
 			}
 		}
-    }
+	}
 }
