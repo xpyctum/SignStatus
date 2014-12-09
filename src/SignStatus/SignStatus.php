@@ -24,7 +24,6 @@ use pocketmine\Server;
 class SignStatus extends PluginBase implements Listener{
 
 	public function onEnable(){
-		if(!file_exists($this->getDataFolder())) @mkdir($this->getDataFolder(), 0755, true);
 		$this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML, [
 			"sign" => [
 				"enabled" => false,
@@ -65,12 +64,16 @@ class SignStatus extends PluginBase implements Listener{
 		return $this->sign->get("sign")['z'];
 	}
 	public function onSignChange(SignChangeEvent $event){
+	$this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
 		if(strtolower(trim($event->getLine(0))) == "status" || strtolower(trim($event->getLine(0))) == "[status]"){
 			$tps = $this->getServer()->getTicksPerSecond();
 			$p = count($this->getServer()->getOnlinePlayers());
 			$level = $event->getBlock()->getLevel();
 			$full = $this->getServer()->getMaxPlayers();
-			$event->setText("[STATUS]", "TPS: [$tps]", "ONLINE: $p/$full", "******");
+			$event->setLine(0,"[STATUS]");
+			$event->setLine(1,"TPS: [".$tps."]");
+			$event->setLine(2,"ONLINE: ".$p."/".$full."");
+			$event->setLine(3,"******");
 			$this->sign->set("x",$event->getBlock()->getX());			
 			$this->sign->set("y",$event->getBlock()->getY());			
 			$this->sign->set("z",$event->getBlock()->getZ());			
