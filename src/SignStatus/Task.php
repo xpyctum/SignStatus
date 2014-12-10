@@ -23,13 +23,14 @@ class Task extends PluginTask{
 			$y = $this->plugin->getThisSignY();
 			$z = $this->plugin->getThisSignZ();
 			$lvz = $this->plugin->level();
-			$level = $this->plugin->getServer()->getLevelByName($lvz);
+			$tps = Server::getInstance()->getTicksPerSecond();
+			$p = count(Server::getInstance()->getOnlinePlayers());
+			$full = Server::getInstance()->getMaxPlayers();
+			$level = Server::getInstance()->getLevelByName($lvz);
 			$sign = $level->getTile(new Vector3($x,$y,$z));
+			$rand = rand(0,100);
 			if($sign instanceof Sign){
-				$texts = $sign->getText();
-				$texts[0] = "TPS";
-				$sign->setText(...$texts);
-				
+				$sign->setText("[STATUS]", "TPS: [$tps]", "ONLINE: $p/$full", "$rand");
 			}
 		}
     }

@@ -24,6 +24,7 @@ use pocketmine\Server;
 class SignStatus extends PluginBase implements Listener{
 
 	public function onEnable(){
+		@mkdir($this->getDataFolder());
 		$this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML, [
 			"sign" => [
 				"enabled" => false,
@@ -39,15 +40,8 @@ class SignStatus extends PluginBase implements Listener{
 	}
 	public function onDisable()
 	{
-		$this->sign->save();
+		
 	}
-	// public function onBlockPlace(BlockPlaceEvent $event){
-		//$name = $event->getPlayer()->getDisplayName();
-		// $player = $event->getPlayer();
-		// if($event->getBlock()->getID() === Item::SIGN || $event->getBlock()->getID() === Item::WALL_SIGN || $event->getBlock()->getID() === Item::SIGN_POST){
-			// $sign = $event->getLevel()->getTile(new Vector($event->getBlock()->getX(), $event->getBlock()->getY(), $event->getBlock()->getZ()));
-		// }
-	// }
 	public function enabled(){
 		return $this->sign->get("sign")['enabled'];
 	}
@@ -64,22 +58,28 @@ class SignStatus extends PluginBase implements Listener{
 		return $this->sign->get("sign")['z'];
 	}
 	public function onSignChange(SignChangeEvent $event){
-	$this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
+	$sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
 		if(strtolower(trim($event->getLine(0))) == "status" || strtolower(trim($event->getLine(0))) == "[status]"){
 			$tps = $this->getServer()->getTicksPerSecond();
 			$p = count($this->getServer()->getOnlinePlayers());
-			$level = $event->getBlock()->getLevel();
+			$level = $event->getBlock()->getLevel()->getName();
 			$full = $this->getServer()->getMaxPlayers();
 			$event->setLine(0,"[STATUS]");
 			$event->setLine(1,"TPS: [".$tps."]");
 			$event->setLine(2,"ONLINE: ".$p."/".$full."");
 			$event->setLine(3,"******");
-			// $this->sign->set("x",$event->getBlock()->getX());			
-			// $this->sign->set("y",$event->getBlock()->getY());			
-			// $this->sign->set("z",$event->getBlock()->getZ());			
-			// $this->sign->set("enabled","true");			
-			// $this->sign->set("level",$level);			
-			// $this->sign->save();
+			$arr = array(
+			"sign" => array(
+				"x" => $event->getBlock()->getX(),
+			    "y" => $event->getBlock()->getY(),
+				"z" => $event->getBlock()->getZ(),
+				"enabled" => true,
+				"level" => $level
+		        )
+			);
+			$sign->setAll($arr);
+			$sign->save();
+			$event->getPlayer()->sendMessage("[SignStatus] You successfully created status sign!");
 		}
 	}
 }
