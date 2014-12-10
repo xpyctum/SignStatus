@@ -74,12 +74,12 @@ class SignStatus extends PluginBase implements Listener{
 			$event->setLine(1,"TPS: [".$tps."]");
 			$event->setLine(2,"ONLINE: ".$p."/".$full."");
 			$event->setLine(3,"******");
-			$this->sign->set("x",$event->getBlock()->getX());			
-			$this->sign->set("y",$event->getBlock()->getY());			
-			$this->sign->set("z",$event->getBlock()->getZ());			
-			$this->sign->set("enabled","true");			
-			$this->sign->set("level",$level);			
-			$this->sign->save();
+			// $this->sign->set("x",$event->getBlock()->getX());			
+			// $this->sign->set("y",$event->getBlock()->getY());			
+			// $this->sign->set("z",$event->getBlock()->getZ());			
+			// $this->sign->set("enabled","true");			
+			// $this->sign->set("level",$level);			
+			// $this->sign->save();
 		}
 	}
 }
