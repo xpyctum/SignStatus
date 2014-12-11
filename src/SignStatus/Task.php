@@ -28,7 +28,7 @@ class Task extends PluginTask{
 			$full = Server::getInstance()->getMaxPlayers();
 			$level = Server::getInstance()->getLevelByName($lvz);
 			$sign = $level->getTile(new Vector3($x,$y,$z));
-			$rand = rand(0,100);
+			$rand = rand(0,100); //For debug
 			if($sign instanceof Sign){
 				$sign->setText("[STATUS]", "TPS: [$tps]", "ONLINE: $p/$full", "$rand");
 			}
