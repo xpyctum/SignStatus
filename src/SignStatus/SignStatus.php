@@ -81,6 +81,7 @@ class SignStatus extends PluginBase implements Listener{
 				);
 				$sign->setAll($arr);
 				$sign->save();
+				$sign->reload();
 				$event->getPlayer()->sendMessage("[SignStatus] You successfully created status sign!");
 			}else{
 				$player->sendMessage("[SignStatus] You don't have permissions!");
@@ -112,6 +113,7 @@ class SignStatus extends PluginBase implements Listener{
 				$sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
 				$sign->setAll($arr);
 				$sign->save();
+				$sign->reload();
 				 }
 				}
 			}
