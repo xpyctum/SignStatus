@@ -113,6 +113,7 @@ class SignStatus extends PluginBase implements Listener{
 				$sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
 				$sign->setAll($arr);
 				$sign->save();
+				$sign->reload();
 				 }
 				}
 			}
