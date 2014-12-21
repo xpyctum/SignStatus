@@ -81,7 +81,11 @@ class SignStatus extends PluginBase implements Listener{
 				);
 				$sign->setAll($arr);
 				$sign->save();
+<<<<<<< HEAD
 				$sign->reload();
+=======
+				$sign->reload(); //It's very important! Because if we don't use this, plugin will be use old config or DON't update IF we create first sign!
+>>>>>>> origin/master
 				$event->getPlayer()->sendMessage("[SignStatus] You successfully created status sign!");
 			}else{
 				$player->sendMessage("[SignStatus] You don't have permissions!");
