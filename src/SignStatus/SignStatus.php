@@ -76,13 +76,9 @@ class SignStatus extends PluginBase implements Listener{
 					"y" => $event->getBlock()->getY(),
 					"z" => $event->getBlock()->getZ(),
 					"enabled" => true,
-					"level" => $level
-					)
-				);
+					"level" => $level));
 				$sign->setAll($arr);
 				$sign->save();
-
-				$sign->reload();
 				$sign->reload(); //It's very important! Because if we don't use this, plugin will be use old config or DON't update IF we create first sign!
 				$event->getPlayer()->sendMessage("[SignStatus] You successfully created status sign!");
 			}else{
@@ -92,30 +88,25 @@ class SignStatus extends PluginBase implements Listener{
 				$event->setLine(2,"DON'T HAVE");
 				$event->setLine(3,"PERMISSIONS");
 			}
-			
-		
 		}
 	}
-	public function onPlayerBreakBlock(BlockBreakEvent $event)
-    {
+	public function onPlayerBreakBlock(BlockBreakEvent $event){
         if ($event->getBlock()->getID() === Item::SIGN || $event->getBlock()->getID() === Item::WALL_SIGN || $event->getBlock()->getID() === Item::SIGN_POST) {
             $signt = $event->getBlock();
             if (($tile = $signt->getLevel()->getTile($signt))){
-				if($tile instanceof Sign){
-				 if($event->getBlock()->getX() == $this->getThisSignX() || $event->getBlock()->getY() == $this->getThisSignY() || $event->getBlock()->getZ() == $this->getThisSignZ()){
-					$arr = array(
-					"sign" => array(
-						"x" => $event->getBlock()->getX(),
-						"y" => $event->getBlock()->getY(),
-						"z" => $event->getBlock()->getZ(),
-						"enabled" => false,
-						"level" => "world"
-					)
-				);
-				$sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
-				$sign->setAll($arr);
-				$sign->save();
-				$sign->reload();
+		if($tile instanceof Sign){
+			if($event->getBlock()->getX() == $this->getThisSignX() || $event->getBlock()->getY() == $this->getThisSignY() || $event->getBlock()->getZ() == $this->getThisSignZ()){
+				$arr = array(
+				"sign" => array(
+					"x" => $event->getBlock()->getX(),
+					"y" => $event->getBlock()->getY(),
+					"z" => $event->getBlock()->getZ(),
+					"enabled" => false,
+					"level" => "world"));
+						$sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
+						$sign->setAll($arr);
+						$sign->save();
+						$sign->reload();
 				 }
 				}
 			}
