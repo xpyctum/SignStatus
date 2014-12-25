@@ -34,15 +34,7 @@ class SignStatus extends PluginBase implements Listener{
 
 	public function onEnable(){
 		@mkdir($this->getDataFolder());
-		$this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML, [
-			"sign" => [
-				"enabled" => false,
-				"x" => 0,
-				"y" => 0,
-				"z" => 0,
-				"level" => "world"
-			]
-		]);
+		$this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML); //FIXED !
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$time = 100;
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new Task($this), $time);
