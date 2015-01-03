@@ -121,36 +121,6 @@ owsla:
     tnt-explode: allow
     bucket-use: deny
     drop-item: allow
-25:
-  min:
-  - -3
-  - 68
-  - 355
-  max:
-  - 10
-  - 68
-  - 367
-  owners:
-  - mr_playboy
-  members: []
-  level: "0101"
-  flags:
-    pvp: allow
-    build: deny
-    entry: allow
-    god-mode: deny
-    use: deny
-    cmd-use: allow
-    send-chat: allow
-    explode: allow
-    burn: allow
-    regain: allow
-    teleport: allow
-    mob-damage: allow
-    sleep: allow
-    tnt-explode: allow
-    bucket-use: deny
-    drop-item: allow
 hpho:
   min:
   - 1
@@ -2436,36 +2406,6 @@ daniel:
   - 186
   owners:
   - daniel5437
-  members: []
-  level: "0101"
-  flags:
-    pvp: allow
-    build: deny
-    entry: allow
-    god-mode: deny
-    use: deny
-    cmd-use: allow
-    send-chat: allow
-    explode: allow
-    burn: allow
-    regain: allow
-    teleport: allow
-    mob-damage: allow
-    sleep: allow
-    tnt-explode: allow
-    bucket-use: deny
-    drop-item: allow
-norm:
-  min:
-  - -134
-  - 63
-  - 187
-  max:
-  - -125
-  - 71
-  - 196
-  owners:
-  - _mr_nick_
   members: []
   level: "0101"
   flags:
