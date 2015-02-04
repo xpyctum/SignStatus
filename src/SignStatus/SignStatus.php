@@ -17,23 +17,19 @@ use pocketmine\block\Block;
 use pocketmine\Server;
 
 /*
-╔══╗─╔╗╔╗
-║╔╗║─║║║║
-║╚╝╚╗║╚╝║
-║╔═╗║╚═╗║
-║╚═╝║─╔╝║
-╚═══╝─╚═╝
-╔══╗╔══╗╔═══╗╔╗╔╗╔══╗╔════╗╔╗╔╗╔╗──╔╗
-╚═╗║║╔═╝║╔═╗║║║║║║╔═╝╚═╗╔═╝║║║║║║──║║
-──║╚╝║──║╚═╝║║╚╝║║║────║║──║║║║║╚╗╔╝║
-──║╔╗║──║╔══╝╚═╗║║║────║║──║║║║║╔╗╔╗║
-╔═╝║║╚═╗║║────╔╝║║╚═╗──║║──║╚╝║║║╚╝║║
-╚══╝╚══╝╚╝────╚═╝╚══╝──╚╝──╚══╝╚╝──╚╝
+##########################################
+###############by xpyctum#################
+##########################################
 */
 class SignStatus extends PluginBase implements Listener{
 
+	public $sign;
+
 	public function onEnable(){
-		@mkdir($this->getDataFolder());
+		if(!is_dir($this->getDataFolder())){
+			mkdir($this->getDataFolder());
+		}
+		$this->saveResource("sign.yml");
 		$this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML); //FIXED !
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$time = 100;
@@ -59,7 +55,6 @@ class SignStatus extends PluginBase implements Listener{
 		return $this->sign->get("sign")['z'];
 	}
 	public function onSignChange(SignChangeEvent $event){
-	$sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
 	$player = $event->getPlayer();
 		if(strtolower(trim($event->getLine(0))) == "status" || strtolower(trim($event->getLine(0))) == "[status]"){
 			if($player->hasPermission("signstatus")){
@@ -77,10 +72,12 @@ class SignStatus extends PluginBase implements Listener{
 					"y" => $event->getBlock()->getY(),
 					"z" => $event->getBlock()->getZ(),
 					"enabled" => true,
-					"level" => $level));
-				$sign->setAll($arr);
-				$sign->save();
-				$sign->reload(); //It's very important! Because if we don't use this, plugin will be use old config or DON't update IF we create first sign!
+					"level" => $level
+					)
+				);
+				$this->sign->setAll($arr);
+				$this->sign->save();
+				$this->sign->reload();
 				$event->getPlayer()->sendMessage("[SignStatus] You successfully created status sign!");
 			}else{
 				$player->sendMessage("[SignStatus] You don't have permissions!");
@@ -89,25 +86,29 @@ class SignStatus extends PluginBase implements Listener{
 				$event->setLine(2,"DON'T HAVE");
 				$event->setLine(3,"PERMISSIONS");
 			}
+			
+		
 		}
 	}
-	public function onPlayerBreakBlock(BlockBreakEvent $event){
+	public function onPlayerBreakBlock(BlockBreakEvent $event)
+    {
         if ($event->getBlock()->getID() === Item::SIGN || $event->getBlock()->getID() === Item::WALL_SIGN || $event->getBlock()->getID() === Item::SIGN_POST) {
             $signt = $event->getBlock();
             if (($tile = $signt->getLevel()->getTile($signt))){
-		if($tile instanceof Sign){
-			if($event->getBlock()->getX() == $this->getThisSignX() || $event->getBlock()->getY() == $this->getThisSignY() || $event->getBlock()->getZ() == $this->getThisSignZ()){
-				$arr = array(
-				"sign" => array(
-					"x" => $event->getBlock()->getX(),
-					"y" => $event->getBlock()->getY(),
-					"z" => $event->getBlock()->getZ(),
-					"enabled" => false,
-					"level" => "world"));
-						$sign = new Config($this->getDataFolder()."sign.yml", Config::YAML);
-						$sign->setAll($arr);
-						$sign->save();
-						$sign->reload();
+				if($tile instanceof Sign){
+				 if($event->getBlock()->getX() == $this->getThisSignX() || $event->getBlock()->getY() == $this->getThisSignY() || $event->getBlock()->getZ() == $this->getThisSignZ()){
+					$arr = array(
+					"sign" => array(
+						"x" => $event->getBlock()->getX(),
+						"y" => $event->getBlock()->getY(),
+						"z" => $event->getBlock()->getZ(),
+						"enabled" => false,
+						"level" => "world"
+					)
+				);
+				$this->sign->setAll($arr);
+				$this->sign->save();
+				$this->sign->reload();
 				 }
 				}
 			}
