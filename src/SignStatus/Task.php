@@ -11,9 +11,11 @@ use pocketmine\tile\Sign;
 
 class Task extends PluginTask{
 	private $plugin;
+	private $countable;
 	public function __construct(SignStatus $plugin){
 		parent::__construct($plugin);
 		$this->plugin = $plugin;
+		$this->countable = 0;
 	}
 
     public function onRun($currentTick){
@@ -28,9 +30,9 @@ class Task extends PluginTask{
 			$full = Server::getInstance()->getMaxPlayers();
 			$level = Server::getInstance()->getLevelByName($lvz);
 			$sign = $level->getTile(new Vector3($x,$y,$z));
-			$rand = rand(0,100); //For debug
+			$count = $this->countable++; //For debug
 			if($sign instanceof Sign){
-				$sign->setText("[STATUS]", "TPS: [$tps]", "ONLINE: $p/$full", "$rand");
+				$sign->setText("[STATUS]", "TPS: [$tps]", "ONLINE: $p/$full", "$count");
 			}
 		}
     }
