@@ -45,11 +45,11 @@ class SignStatus extends PluginBase implements Listener{
         }
 
         $this->saveResource("sign.yml");
-        $this->saveResource("translation.yml");
+        $this->saveResource("translations.yml");
         $this->saveResource("config.yml");
 
         $this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML); //FIXED !
-        $this->translation = new Config($this->getDataFolder()."translation.yml",Config::YAML);
+        $this->translation = new Config($this->getDataFolder()."translations.yml",Config::YAML);
         $this->config = new Config($this->getDataFolder()."config.yml",Config::YAML);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $time = $this->config->get("time");
@@ -161,4 +161,6 @@ class SignStatus extends PluginBase implements Listener{
             }
         }
     }
+
+
 }
