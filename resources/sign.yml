@@ -1,0 +1,6 @@
+sign:
+ x: 0
+ y: 0
+ z: 0
+ level: "world"
+ enabled: false
