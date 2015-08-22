@@ -21,19 +21,16 @@ class Task extends PluginTask{
     public function onRun($currentTick){
     	$val = $this->plugin->sign->get("sign")["enabled"];
 		if($val == "true" || $val == true){
-			$x = $this->plugin->sign->get("sign")["x"];
-			$y = $this->plugin->sign->get("sign")["y"];
-			$z = $this->plugin->sign->get("sign")["z"];
-			$lvz = $this->plugin->sign->get("sign")["level"];
-			$tps = Server::getInstance()->getTicksPerSecond();
-			$p = count(Server::getInstance()->getOnlinePlayers());
-			$full = Server::getInstance()->getMaxPlayers();
-			$level = Server::getInstance()->getLevelByName($lvz);
-            if($level instanceof Level) {
-                $sign = $level->getTile(new Vector3($x, $y, $z));
-                $count = $this->countable++; //For debug
-                if ($sign instanceof Sign) {
-                    $sign->setText(F::GREEN."[STATUS]", F::YELLOW."TPS: [".$tps."]", F::AQUA."ONLINE: ".F::GREEN.$p.F::WHITE."/".F::RED.$full."", F::GOLD.$count);
+            foreach($this->plugin->getServer()->getDefaultLevel()->getTiles() as $tile){
+                if($tile instanceof Sign){
+                    if($tile->getText()[0] == F::GREEN."[STATUS]"){
+                        $tps = Server::getInstance()->getTicksPerSecond();
+                        $p = count(Server::getInstance()->getOnlinePlayers());
+                        $full = Server::getInstance()->getMaxPlayers();
+                        $count = $this->countable++; //For debug
+                        $load = $this->plugin->getServer()->getTickUsage();
+                        $tile->setText(F::GREEN."[STATUS]", F::YELLOW."TPS: [".$tps."]", F::AQUA."ONLINE: ".F::GREEN.$p.F::WHITE."/".F::RED.$full."", F::GOLD."LOAD: ".F::DARK_BLUE.$load. " %");
+                    }
                 }
             }
 		}

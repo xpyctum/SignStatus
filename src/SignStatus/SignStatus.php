@@ -23,7 +23,7 @@ use pocketmine\utils\TextFormat as F;
 ─███──█──────█───█──█──█──█─█─█───█
 ██─██─█──────█───████──█──███─█───█
 */
-//TODO: Make multisigns and configurable format of sign
+//TODO: Make configurable format of sign
 class SignStatus extends PluginBase implements Listener{
 
     /** @var Config sign */
