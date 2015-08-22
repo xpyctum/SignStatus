@@ -1,4 +1,9 @@
-It is very simple plugin for watching update TPS and current online on a sign!
-For install create sign and write status or [status]
-Then close editing sign and wait when the sign is update. it is 4< seconds for update!
+ENG:
+ - 1. Write on the first line "status" on a sign.
+ - Close and watch :3
+RUS:
+ - Взять табличку и написать на первой строке status.
+ - Закрыть и подождать обновления таблички.
+
+EXAMPLE/ПРИМЕР
 
