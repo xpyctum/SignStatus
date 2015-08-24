@@ -20,17 +20,18 @@ class Task extends PluginTask{
 
     	public function onRun($currentTick){
     		$val = $this->plugin->sign->get("sign")["enabled"];
-		if($val == "true" || $val == true){
+		if($val === "true" || $val === true){
 			foreach($this->plugin->getServer()->getLevels() as $levels){
             			foreach($levels->getTiles() as $tile){
                 			if($tile instanceof Sign){
-                    				if($tile->getText()[0] == F::GREEN."[STATUS]"){
+                				$text = $tile->getText();
+                    				if($text[0] === F::GREEN . "[STATUS]"){
                         				$tps = $this->plugin->getServer()->getTicksPerSecond();
                         				$p = count($this->plugin->getServer()->getOnlinePlayers());
                         				$full = $this->plugin->getServer()->getMaxPlayers();
                         				$count = $this->countable++; //For debug
                         				$load = $this->plugin->getServer()->getTickUsage();
-                        				$tile->setText(F::GREEN."[STATUS]", F::YELLOW."TPS: [".$tps."]", F::AQUA."ONLINE: ".F::GREEN.$p.F::WHITE."/".F::RED.$full."", F::GOLD."LOAD: ".F::DARK_BLUE.$load. " %");
+                        				$tile->setText(F::GREEN . "[STATUS]", F::YELLOW . "TPS: [".  $tps . "]", F::AQUA . "ONLINE: " . F::GREEN . $p . F::WHITE . "/" . F::RED . $full . "", F::GOLD . "LOAD: " . F::DARK_BLUE . $load . " %");
                     				}
                 			}
             			}
