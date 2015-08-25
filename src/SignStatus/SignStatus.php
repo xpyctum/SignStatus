@@ -114,10 +114,13 @@ class SignStatus extends PluginBase implements Listener{
                 $p = count($this->getServer()->getOnlinePlayers());
                 $level = $event->getBlock()->getLevel()->getName();
                 $full = $this->getServer()->getMaxPlayers();
+                $event->setText(F::GREEN."[STATUS]",F::YELLOW."TPS: [$tps]",F::AQUA."ONLINE: "..F::GREEN.$p.F::WHITE."/".F::RED.$full",F::GOLD."******");
+                /*
                 $event->setLine(0,F::GREEN."[STATUS]");
                 $event->setLine(1,F::YELLOW."TPS: [".$tps."]");
                 $event->setLine(2,F::AQUA."ONLINE: ".F::GREEN.$p.F::WHITE."/".F::RED.$full."");
                 $event->setLine(3,F::GOLD."******");
+                */
 
                 $this->sign->setNested("sign.x", $event->getBlock()->getX());
                 $this->sign->setNested("sign.y", $event->getBlock()->getY());
