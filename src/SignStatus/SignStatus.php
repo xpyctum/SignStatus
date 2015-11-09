@@ -145,7 +145,7 @@ class SignStatus extends PluginBase implements Listener{
             $signt = $event->getBlock();
             if (($tile = $signt->getLevel()->getTile($signt))){
                 if($tile instanceof Sign) {
-                    if ($event->getBlock()->getX() == $this->sign->getNested("sign.x") || $event->getBlock()->getY() == $this->sign->getNested("sign.y") || $event->getBlock()->getZ() == $this->sign->getNested("sign.z")) {
+                    if ($event->getBlock()->getX() == $this->sign->getNested("sign.x") && $event->getBlock()->getY() == $this->sign->getNested("sign.y") && $event->getBlock()->getZ() == $this->sign->getNested("sign.z")) {
                         if($event->getPlayer()->hasPermission("signstatus.break")) {
                             $this->sign->setNested("sign.x", $event->getBlock()->getX());
                             $this->sign->setNested("sign.y", $event->getBlock()->getY());
