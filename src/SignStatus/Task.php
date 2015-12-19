@@ -2,18 +2,15 @@
 
 namespace SignStatus;
 
-use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\String;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\tile\Sign;
 
-class Task extends PluginTask
-{
+class Task extends PluginTask{
     private $plugin;
     private $countable;
 
-    public function __construct(SignStatus $plugin)
-    {
+    public function __construct(SignStatus $plugin){
         parent::__construct($plugin);
         $this->plugin = $plugin;
         $this->countable = 0;
@@ -41,7 +38,7 @@ class Task extends PluginTask
                             $v = str_replace("{SERVER_LOAD}", $load, $v);
                             $index[$x] = $v;
                         }
-                        $tile->setText($index[0],$index[1],$index[2],$index[3]);
+                        $tile->setText($index[0], $index[1], $index[2], $index[3]);
                     }
                 }
             }
