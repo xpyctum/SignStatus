@@ -1,0 +1,8 @@
+#You can use this params:
+#{ONLINE} {MAX_ONLINE} {WORLD_NAME}
+#{TPS] [SERVER_LOAD]
+format:
+ 1: "[STATUS]"
+ 2: "{ONLINE}/{MAX_ONLINE}"
+ 3: "TPS: {TPS}"
+ 4: "LOAD: {SERVER_LOAD}%"

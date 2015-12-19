@@ -2,12 +2,13 @@
 namespace SignStatus;
 
 use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\Listener;
 use pocketmine\item\Item;
-use pocketmine\utils\Config;
 use pocketmine\plugin\PluginBase;
 use pocketmine\tile\Sign;
-use pocketmine\event\block\SignChangeEvent;
+use pocketmine\tile\Tile;
+use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as F;
 
 /*
@@ -35,6 +36,9 @@ class SignStatus extends PluginBase implements Listener{
     /** @var Config config */
     public $config;
 
+    /** @var Config config */
+    public $format;
+
     /** @var string  */
     public $prefix = "§4[§2SignStatus§4]§6 ";
 
@@ -47,10 +51,12 @@ class SignStatus extends PluginBase implements Listener{
         $this->saveResource("sign.yml");
         $this->saveResource("translations.yml");
         $this->saveResource("config.yml");
+        $this->saveResource("format.yml");
 
         $this->sign = new Config($this->getDataFolder()."sign.yml", Config::YAML); //FIXED !
         $this->translation = new Config($this->getDataFolder()."translations.yml",Config::YAML);
         $this->config = new Config($this->getDataFolder()."config.yml",Config::YAML);
+        $this->format = new Config($this->getDataFolder()."format.yml",Config::YAML);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $time = $this->config->get("time");
         if(!(is_numeric($time))){
@@ -66,42 +72,6 @@ class SignStatus extends PluginBase implements Listener{
         $this->getLogger()->notice(F::RED."SignStatus disabled");
     }
 
-    /**
-     * @deprecated
-     * @return mixed
-     */
-    public function enabled(){
-        return $this->sign->get("sign")['enabled'];
-    }
-    /**
-     * @deprecated
-     * @return mixed
-     */
-    public function level(){
-        return $this->sign->get("sign")['level'];
-    }
-    /**
-     * @deprecated
-     * @return mixed
-     */
-    public function getThisSignX(){
-        return $this->sign->get("sign")['x'];
-    }
-    /**
-     * @deprecated
-     * @return mixed
-     */
-    public function getThisSignY(){
-        return $this->sign->get("sign")['y'];
-    }
-    /**
-     * @deprecated
-     * @return mixed
-     */
-    public function getThisSignZ(){
-        return $this->sign->get("sign")['z'];
-    }
-
 
     /**
      * @param SignChangeEvent $event
@@ -109,26 +79,24 @@ class SignStatus extends PluginBase implements Listener{
     public function onSignChange(SignChangeEvent $event){
         $player = $event->getPlayer();
         if(strtolower(trim($event->getLine(0))) == "status" || strtolower(trim($event->getLine(0))) == "[status]"){
-            if($player->hasPermission("signstatus")){
+            if($player->hasPermission("signstatus") or $player->hasPermission("signstatus.create")){
                 $tps = $this->getServer()->getTicksPerSecond();
                 $p = count($this->getServer()->getOnlinePlayers());
                 $level = $event->getBlock()->getLevel()->getName();
                 $full = $this->getServer()->getMaxPlayers();
-                $event->setText(F::GREEN."[STATUS]",F::YELLOW."TPS: [$tps]",F::AQUA."ONLINE: "..F::GREEN.$p.F::WHITE."/".F::RED.$full",F::GOLD."******");
-                /*
-                $event->setLine(0,F::GREEN."[STATUS]");
-                $event->setLine(1,F::YELLOW."TPS: [".$tps."]");
-                $event->setLine(2,F::AQUA."ONLINE: ".F::GREEN.$p.F::WHITE."/".F::RED.$full."");
-                $event->setLine(3,F::GOLD."******");
-                */
+                $load = $this->getServer()->getTickUsage();
+                $format = $this->format->getAll();
 
-                $this->sign->setNested("sign.x", $event->getBlock()->getX());
-                $this->sign->setNested("sign.y", $event->getBlock()->getY());
-                $this->sign->setNested("sign.z", $event->getBlock()->getZ());
-                $this->sign->setNested("sign.enabled", true);
-                $this->sign->setNested("sign.level", $level);
-                $this->sign->save();
-                $this->sign->reload();
+                for ($x = 0; $x <= 3; $x++) {
+                    $v = $format["format"][$x+1];
+                    $v = str_replace("{ONLINE}", $p, $v);
+                    $v = str_replace("{MAX_ONLINE}", $full, $v);
+                    $v = str_replace("{WORLD_NAME}", $level, $v);
+                    $v = str_replace("{TPS}", $tps, $v);
+                    $v = str_replace("{SERVER_LOAD}", $load, $v);
+                    $event->setLine($x,$v);
+                }
+                //$event->setText(F::GREEN."[STATUS]",F::YELLOW."TPS: [$tps]",F::AQUA."ONLINE: ".F::GREEN.$p.F::WHITE."/".F::RED.$full.",".F::GOLD."******");
                 $event->getPlayer()->sendMessage($this->prefix.$this->translation->get("sign_created"));
             }else{
                 $player->sendMessage($this->prefix.$this->translation->get("sign_no_perms"));
@@ -146,18 +114,13 @@ class SignStatus extends PluginBase implements Listener{
             if (($tile = $signt->getLevel()->getTile($signt))){
                 if($tile instanceof Sign) {
                     if ($event->getBlock()->getX() == $this->sign->getNested("sign.x") && $event->getBlock()->getY() == $this->sign->getNested("sign.y") && $event->getBlock()->getZ() == $this->sign->getNested("sign.z")) {
-                        if($event->getPlayer()->hasPermission("signstatus.break")) {
-                            $this->sign->setNested("sign.x", $event->getBlock()->getX());
-                            $this->sign->setNested("sign.y", $event->getBlock()->getY());
-                            $this->sign->setNested("sign.z", $event->getBlock()->getZ());
-                            $this->sign->setNested("sign.enabled", false);
-                            $this->sign->setNested("sign.level", "world");
-                            $this->sign->save();
-                            $this->sign->reload();
-                            $event->getPlayer()->sendMessage($this->prefix.$this->translation->get("sign_destroyed"));
-                        }else{
-                            $event->getPlayer()->sendMessage($this->prefix.$this->translation->get("sign_no_perms"));
-                            $event->setCancelled();
+                        if($tile->getText()[0] == strtolower($this->format->getAll()["format"][1])) {
+                            if ($event->getPlayer()->hasPermission("signstatus.break")) {
+                                $event->getPlayer()->sendMessage($this->prefix . $this->translation->get("sign_destroyed"));
+                            } else {
+                                $event->getPlayer()->sendMessage($this->prefix . $this->translation->get("sign_no_perms"));
+                                $event->setCancelled();
+                            }
                         }
                     }
                 }
