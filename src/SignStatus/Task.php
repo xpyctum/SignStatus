@@ -2,7 +2,7 @@
 
 namespace SignStatus;
 
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\tile\Sign;
 
