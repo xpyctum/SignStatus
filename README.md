@@ -9,4 +9,4 @@
 Plugin for the api = 3.0.0 avaliable in new-api branch
  
 ##Example
-![](http://pp.vk.me/c629126/v629126517/c928/E99LLIOTuTE.jpg)
+![](http://pp.userapi.com/c629126/v629126517/c928/E99LLIOTuTE.jpg)
